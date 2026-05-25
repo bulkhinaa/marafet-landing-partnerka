@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/* =========================================
+   MARAFET ПРОСТРАНСТВА — Design Tokens
+   Brand palette synced with marafet-frontend/src/shared/styles/primitives.ts
+   ========================================= */
+
+@theme {
+  /* === Accent (фиолетовая шкала Марафета) === */
+  --color-accent-10: #f8f6ff;
+  --color-accent-20: #eee9ff;
+  --color-accent-30: #e3dbff;
+  --color-accent-40: #cabbff;
+  --color-accent-50: #b6a1ff;
+  --color-accent-60: #7a54ff; /* primary brand */
+  --color-accent-70: #583db5;
+  --color-accent-80: #412e83;
+  --color-accent-90: #3d2b7d;
+  --color-accent-100: #1e1639;
+
+  /* === Magenta (вторичный акцент для градиента) === */
+  --color-magenta-50: #d09bff;
+  --color-magenta-60: #ab5ce9;
+  --color-magenta-70: #8b3fc4;
+
+  /* === Rose (тёплый розовый акцент — бьюти-индустрия) === */
+  --color-rose-30: #ffe4ed;
+  --color-rose-40: #ffcbd9;
+  --color-rose-50: #ffa8c5;
+  --color-rose-60: #ff7b9c;
+  --color-rose-70: #e9577a;
+
+  /* === Ink (серо-чёрная шкала) === */
+  --color-ink-10: #f7f7f7;
+  --color-ink-20: #efefef;
+  --color-ink-30: #dddddd;
+  --color-ink-40: #d0d0d0;
+  --color-ink-50: #b4b4b4;
+  --color-ink-60: #858585;
+  --color-ink-70: #5a5a5b;
+  --color-ink-80: #424244;
+  --color-ink-90: #28282b;
+  --color-ink-100: #17171a;
+
+  /* === Semantic === */
+  --color-success: #18b38a;
+  --color-error: #ff7c8c;
+  --color-warning: #ffb547;
+
+  /* === Surfaces === */
+  --color-surface: #ffffff;
+  --color-surface-soft: #f8f6ff;
+  --color-surface-dark: #1e1639;
+
+  /* === Fonts (linked to next/font CSS variables) === */
+  --font-sans: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-display: var(--font-unbounded), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+
+  /* === Custom radius extension === */
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-4xl: 40px;
+
+  /* === Shadows / glows === */
+  --shadow-glow-sm: 0 0 40px -10px rgba(122, 84, 255, 0.35);
+  --shadow-glow-md: 0 0 80px -10px rgba(122, 84, 255, 0.5);
+  --shadow-glow-lg: 0 0 140px -20px rgba(122, 84, 255, 0.45);
+
+  /* === Easings === */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* === Animations === */
+  --animate-shimmer: shimmer 6s linear infinite;
+  --animate-blob-spin: blobSpin 28s linear infinite;
+  --animate-blob-spin-reverse: blobSpinReverse 36s linear infinite;
+  --animate-scroll-hint: scrollHint 2s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  @keyframes blobSpin {
+    from { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.08); }
+    to { transform: rotate(360deg) scale(1); }
+  }
+  @keyframes blobSpinReverse {
+    from { transform: rotate(360deg) scale(1); }
+    50% { transform: rotate(180deg) scale(0.94); }
+    to { transform: rotate(0deg) scale(1); }
+  }
+  @keyframes scrollHint {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    50% { transform: translateY(8px); opacity: 0.5; }
+  }
+  @keyframes heroIn {
+    from { opacity: 0; transform: translate3d(0, 14px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @keyframes auroraSpin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+  }
+  @keyframes auroraSpinReverse {
+    from { transform: translateX(-50%) rotate(360deg); }
+    to { transform: translateX(-50%) rotate(0deg); }
+  }
+  @keyframes beamSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes wordIn {
+    from { opacity: 0; transform: translate3d(0, 28px, 0); filter: blur(8px); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+  }
+  @keyframes beamFlow {
+    0%, 100% { stroke-dashoffset: 0; opacity: 0.5; }
+    50% { stroke-dashoffset: -40; opacity: 1; }
+  }
+  @keyframes orbSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes blobFloat {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -18px, 0) scale(1.03); }
+  }
+  @keyframes marqueeX {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-50%, 0, 0); }
+  }
+}
+
+/* =========================================
+   Base layer
+   ========================================= */
+
+:root {
+  --background: var(--color-surface);
+  --foreground: var(--color-ink-100);
+  --selection-bg: var(--color-accent-60);
+  --selection-fg: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-fg);
+}
+
+/* =========================================
+   Decorative utilities
+   ========================================= */
+
+/* Тонкая шумовая текстура поверх любого фона */
+.noise {
+  position: relative;
+}
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  z-index: 1;
+}
+
+/* Глитч-градиент для кнопки/CTA */
+.gradient-brand {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-60) 0%,
+    var(--color-magenta-60) 100%
+  );
+}
+
+.gradient-brand-soft {
+  background: linear-gradient(
+    135deg,
+    rgba(122, 84, 255, 0.12) 0%,
+    rgba(171, 92, 233, 0.12) 100%
+  );
+}
+
+/* Бренд-акцент в заголовке: статичный градиент без анимации */
+.shimmer-text {
+  background: linear-gradient(
+    100deg,
+    var(--color-accent-60) 0%,
+    var(--color-magenta-60) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Стили для display-заголовков */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.03em;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
