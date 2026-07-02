@@ -1,5 +1,5 @@
 1:"$Sreact.fragment"
-2:I[39756,["/marafet-landing-partnerka/_next/static/chunks/01xlw8hd842-c.js","/marafet-landing-partnerka/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
-3:I[37457,["/marafet-landing-partnerka/_next/static/chunks/01xlw8hd842-c.js","/marafet-landing-partnerka/_next/static/chunks/0d3shmwh5_nmn.js"],"default"]
+2:I[74958,["/marafet-landing-partnerka/_next/static/chunks/0m6j0e~rtf_hn.js","/marafet-landing-partnerka/_next/static/chunks/0xlti91zq33e_.js"],"default"]
+3:I[60870,["/marafet-landing-partnerka/_next/static/chunks/0m6j0e~rtf_hn.js","/marafet-landing-partnerka/_next/static/chunks/0xlti91zq33e_.js"],"default"]
 4:[]
-0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"6LcvsqrpqOj85ob3pLrg8"}
+0:{"rsc":["$","$1","c",{"children":[null,["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}]}]]}],"isPartial":false,"staleTime":300,"varyParams":"$W4","buildId":"HZmGjWhJTjfw6B6Cbg2HL"}
