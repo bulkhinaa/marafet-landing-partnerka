@@ -40,9 +40,41 @@ export function EarningsTreeSection() {
             className="relative rounded-[32px] bg-white p-8 ring-1 ring-inset ring-ink-20 shadow-[0_20px_60px_-25px_rgba(122,84,255,0.25)] md:p-10"
           >
             <div className="flex flex-col items-center gap-5">
-              {/* You */}
+              {/* You — с пульсирующим кольцом (только desktop) */}
               <div className="relative">
-                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-accent-60 to-magenta-60 text-white shadow-[0_15px_40px_-10px_rgba(122,84,255,0.5)]">
+                {/* Pulse rings — md+ only, оптимизация для мобилки */}
+                {!prefersReducedMotion && (
+                  <>
+                    <motion.div
+                      aria-hidden
+                      className="absolute inset-0 hidden rounded-3xl ring-2 ring-accent-60/40 md:block"
+                      animate={{
+                        scale: [1, 1.4, 1.6],
+                        opacity: [0.6, 0.2, 0],
+                      }}
+                      transition={{
+                        duration: 2.2,
+                        repeat: Infinity,
+                        ease: "easeOut",
+                      }}
+                    />
+                    <motion.div
+                      aria-hidden
+                      className="absolute inset-0 hidden rounded-3xl ring-2 ring-magenta-60/40 md:block"
+                      animate={{
+                        scale: [1, 1.4, 1.6],
+                        opacity: [0.6, 0.2, 0],
+                      }}
+                      transition={{
+                        duration: 2.2,
+                        delay: 1.1,
+                        repeat: Infinity,
+                        ease: "easeOut",
+                      }}
+                    />
+                  </>
+                )}
+                <div className="relative flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-accent-60 to-magenta-60 text-white shadow-[0_15px_40px_-10px_rgba(122,84,255,0.5)]">
                   <Heart className="h-9 w-9 fill-white" strokeWidth={0} />
                 </div>
                 <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white">
@@ -50,10 +82,23 @@ export function EarningsTreeSection() {
                 </span>
               </div>
 
-              {/* Arrow down + label "+1%" */}
+              {/* Arrow down + label "+1%" + текущая монетка */}
               <div className="relative flex flex-col items-center">
-                <div className="h-12 w-px bg-gradient-to-b from-accent-60 to-magenta-60" />
-                <span className="absolute -right-12 top-2 inline-flex items-center gap-1 rounded-full bg-accent-60 px-2.5 py-0.5 text-xs font-bold text-white">
+                <div className="relative h-12 w-px bg-gradient-to-b from-accent-60 to-magenta-60 overflow-visible">
+                  {!prefersReducedMotion && (
+                    <motion.span
+                      className="absolute -left-[5px] top-0 hidden h-2.5 w-2.5 items-center justify-center rounded-full bg-accent-60 shadow-[0_0_12px_2px_rgba(122,84,255,0.6)] md:inline-flex"
+                      animate={{ y: [-4, 48], opacity: [0, 1, 0] }}
+                      transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        ease: "easeIn",
+                        delay: 0.3,
+                      }}
+                    />
+                  )}
+                </div>
+                <span className="absolute -right-2 md:-right-12 top-2 inline-flex items-center gap-1 rounded-full bg-accent-60 px-2.5 py-0.5 text-xs font-bold text-white">
                   +1%
                 </span>
               </div>
@@ -71,10 +116,23 @@ export function EarningsTreeSection() {
                 Ваши друзья (уровень 1)
               </p>
 
-              {/* Arrow down + label "+1%" */}
+              {/* Arrow down + label "+1%" + текущая монетка к L2 */}
               <div className="relative flex flex-col items-center pt-4">
-                <div className="h-12 w-px bg-gradient-to-b from-magenta-60 to-rose-60" />
-                <span className="absolute -right-12 top-6 inline-flex items-center gap-1 rounded-full bg-magenta-60 px-2.5 py-0.5 text-xs font-bold text-white">
+                <div className="relative h-12 w-px bg-gradient-to-b from-magenta-60 to-rose-60 overflow-visible">
+                  {!prefersReducedMotion && (
+                    <motion.span
+                      className="absolute -left-[5px] top-0 hidden h-2.5 w-2.5 items-center justify-center rounded-full bg-magenta-60 shadow-[0_0_12px_2px_rgba(171,92,233,0.6)] md:inline-flex"
+                      animate={{ y: [-4, 48], opacity: [0, 1, 0] }}
+                      transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        ease: "easeIn",
+                        delay: 0.9,
+                      }}
+                    />
+                  )}
+                </div>
+                <span className="absolute -right-2 md:-right-12 top-6 inline-flex items-center gap-1 rounded-full bg-magenta-60 px-2.5 py-0.5 text-xs font-bold text-white">
                   +1%
                 </span>
               </div>
@@ -93,8 +151,8 @@ export function EarningsTreeSection() {
               </p>
 
               <p className="mt-4 max-w-sm text-center text-xs text-ink-60">
-                Глубина программы — только 2 уровня. Привязка пожизненная: даже
-                через 5 лет вы получите %, если ваш друг сделал визит.
+                Глубина программы — только 2 уровня. Привязка действует всё время
+                существования программы и до расторжения договора любой из сторон.
               </p>
             </div>
           </motion.div>
@@ -115,8 +173,8 @@ export function EarningsTreeSection() {
             />
             <ExplainCard
               icon={<InfinityIcon className="h-5 w-5" />}
-              title="Пожизненная привязка"
-              body="Однажды зарегистрировавшийся по вашей ссылке — ваш реферал навсегда. Перейти к другому партнёру нельзя."
+              title="Долгосрочная привязка"
+              body="Однажды зарегистрировавшийся по вашей ссылке — ваш реферал на всё время работы программы. Перейти к другому партнёру нельзя."
               tone="rose"
             />
             <ExplainCard

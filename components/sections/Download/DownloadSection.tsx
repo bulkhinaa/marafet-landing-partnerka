@@ -1,9 +1,11 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { Sparkles as SparklesIcon, Shield } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
+import { Sparkles } from "@/components/ui/Sparkles";
+import { Marquee } from "@/components/ui/Marquee";
 
 export function DownloadSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -35,6 +37,17 @@ export function DownloadSection() {
         }}
       />
 
+      {/* Sparkles overlay — только md+, экономим CPU мобилки */}
+      <div className="pointer-events-none absolute inset-0 -z-0 hidden md:block">
+        <Sparkles
+          count={12}
+          color="rgba(255,255,255,0.85)"
+          minSize={1}
+          maxSize={3}
+          className="absolute inset-0"
+        />
+      </div>
+
       <Container size="lg" className="relative">
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
@@ -44,7 +57,7 @@ export function DownloadSection() {
           className="flex flex-col items-center gap-10 text-center"
         >
           <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white ring-1 ring-inset ring-white/20 backdrop-blur">
-            <Sparkles className="h-3.5 w-3.5 text-magenta-50" />
+            <SparklesIcon className="h-3.5 w-3.5 text-magenta-50" />
             Стать партнёром
           </span>
 
@@ -62,6 +75,20 @@ export function DownloadSection() {
             реферала пойдут начисления.
           </p>
 
+          {/* Плашка вместо кнопок: приложение ещё не опубликовано в сторах */}
+          <div className="inline-flex items-center gap-2.5 rounded-2xl bg-white/[0.08] px-6 py-4 ring-1 ring-inset ring-white/20 backdrop-blur">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-40 opacity-75" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-accent-40" />
+            </span>
+            <span className="font-display text-base font-bold text-white">
+              Скоро в App Store и Google Play
+            </span>
+          </div>
+
+          {/* Кнопки сторов скрыты: ссылки вели в никуда (href="#"), приложение
+              не опубликовано. Вернуть с реальными URL после релиза. */}
+          {false && (
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href="#"
@@ -135,13 +162,43 @@ export function DownloadSection() {
               </div>
             </a>
           </div>
+          )}
 
           <p className="text-xs text-white/45">
-            После установки откройте «Кошелёк → Партнёрская программа» и подпишите
-            договор в приложении.
+            После установки откройте «Кошелёк → Партнёрская программа» и подключитесь
+            к оферте партнёрской программы в приложении.
           </p>
         </motion.div>
       </Container>
+
+      {/* Бегущая строка выгод */}
+      <div className="relative mt-16 md:mt-20">
+        <Marquee speed={45} fade fadeWidth={120} gap={56} className="text-white/65">
+          <BenefitItem text="Без ИП" />
+          <BenefitItem text="Без бумажек" />
+          <BenefitItem text="Без походов в налоговую" />
+          <BenefitItem text="Страховой стаж" />
+          <BenefitItem text="Полис ОМС" />
+          <BenefitItem text="Без лимита 2,4 млн ₽" />
+          <BenefitItem text="Чистые деньги на карту" />
+          <BenefitItem text="Партнёрская программа Марафет" highlight />
+        </Marquee>
+      </div>
     </Section>
+  );
+}
+
+function BenefitItem({ text, highlight }: { text: string; highlight?: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-2 font-display font-bold tracking-tight ${
+        highlight
+          ? "text-2xl md:text-3xl bg-gradient-to-br from-accent-40 via-magenta-50 to-rose-50 bg-clip-text text-transparent"
+          : "text-xl md:text-2xl text-white/55"
+      }`}
+    >
+      <Shield className="h-4 w-4 text-success" />
+      {text}
+    </span>
   );
 }

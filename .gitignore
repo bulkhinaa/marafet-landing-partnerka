@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# internal agent context — не публиковать
+CLAUDE.md
+AGENTS.md
+.claude/
+.codex/
+.github/

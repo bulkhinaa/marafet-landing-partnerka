@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Menu, X, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { LogoMark } from "./Logo";
 import { MARAFET_APP_URL, PROSTRANSTVA_URL } from "@/lib/paths";
@@ -60,6 +61,7 @@ function EcosystemChips({ scrolled }: { scrolled: boolean }) {
 
 export function StickyNav() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let raf = 0;
@@ -75,6 +77,27 @@ export function StickyNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Закрываем меню при resize >= xl
+  useEffect(() => {
+    function onResize() {
+      if (window.innerWidth >= 1280) setOpen(false);
+    }
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  // Блокируем скролл body при открытом мобильном меню
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <header
       className={cn(
@@ -85,9 +108,9 @@ export function StickyNav() {
       <div
         className={cn(
           "mx-auto flex items-center gap-3 rounded-full transition-all duration-300",
-          "w-[calc(100%-32px)] max-w-[1320px] px-3 md:gap-4 md:px-5",
-          scrolled
-            ? "bg-white/90 ring-1 ring-inset ring-ink-20 shadow-[0_10px_40px_-15px_rgba(30,22,57,0.18)] backdrop-blur-md py-2"
+          "w-[calc(100%-24px)] max-w-[1320px] px-3 md:gap-4 md:px-5 md:w-[calc(100%-32px)]",
+          scrolled || open
+            ? "bg-white/95 ring-1 ring-inset ring-ink-20 shadow-[0_10px_40px_-15px_rgba(30,22,57,0.18)] backdrop-blur-md py-2"
             : "bg-white/0 ring-1 ring-inset ring-white/15 backdrop-blur-sm py-3"
         )}
       >
@@ -96,15 +119,20 @@ export function StickyNav() {
           className="inline-flex shrink-0 items-center gap-2.5"
           aria-label="Партнёрская программа Марафет · главная"
         >
-          <LogoMark size={36} glow />
+          <LogoMark size={32} glow />
           <span
             className={cn(
               "hidden whitespace-nowrap font-display text-sm font-bold tracking-tight md:inline",
-              scrolled ? "text-ink-100" : "text-white"
+              scrolled || open ? "text-ink-100" : "text-white"
             )}
           >
             Марафет
-            <span className={cn(scrolled ? "text-ink-60" : "text-white/55")}>
+            <span
+              className={cn(
+                "hidden lg:inline",
+                scrolled || open ? "text-ink-60" : "text-white/55"
+              )}
+            >
               {" · Партнёрка"}
             </span>
           </span>
@@ -132,7 +160,7 @@ export function StickyNav() {
         <a
           href="#download"
           className={cn(
-            "inline-flex h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 text-sm font-semibold transition-colors md:px-5",
+            "hidden h-10 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-4 text-sm font-semibold transition-colors sm:inline-flex md:px-5",
             scrolled
               ? "bg-ink-100 text-white hover:bg-ink-90"
               : "bg-white text-ink-100 hover:bg-white/90"
@@ -140,7 +168,93 @@ export function StickyNav() {
         >
           Стать партнёром
         </a>
+
+        {/* Burger — на <xl показывает разделы + chips + CTA в выпадающем меню */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Закрыть меню" : "Открыть меню"}
+          aria-expanded={open}
+          className={cn(
+            "inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors xl:hidden",
+            scrolled || open
+              ? "bg-ink-10 text-ink-100 ring-1 ring-inset ring-ink-20 hover:bg-ink-20"
+              : "bg-white/10 text-white ring-1 ring-inset ring-white/25 backdrop-blur hover:bg-white/20"
+          )}
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
       </div>
+
+      {/* Мобильное меню */}
+      {open && <MobileMenu onClose={() => setOpen(false)} />}
     </header>
+  );
+}
+
+function MobileMenu({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-x-0 bottom-0 top-[64px] z-40 overflow-y-auto bg-white px-5 pb-10 pt-6 xl:hidden">
+      <div className="mx-auto flex max-w-md flex-col gap-6">
+        {/* Sections */}
+        <div className="flex flex-col gap-1">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink-50">
+            Разделы страницы
+          </p>
+          {SECTIONS.map((s) => (
+            <a
+              key={s.id}
+              href={`#${s.id}`}
+              onClick={onClose}
+              className="rounded-2xl px-4 py-3 text-base font-semibold text-ink-100 transition-colors hover:bg-accent-10"
+            >
+              {s.label}
+            </a>
+          ))}
+        </div>
+
+        {/* Cross-link ecosystem */}
+        <div className="flex flex-col gap-1 border-t border-ink-20 pt-5">
+          <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-ink-50">
+            Экосистема Марафет
+          </p>
+          <a
+            href={MARAFET_APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center justify-between rounded-2xl px-4 py-3 text-base font-semibold text-ink-100 transition-colors hover:bg-accent-10"
+          >
+            Приложение
+            <ExternalLink className="h-4 w-4 text-ink-50" />
+          </a>
+          <a
+            href={PROSTRANSTVA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center justify-between rounded-2xl px-4 py-3 text-base font-semibold text-ink-100 transition-colors hover:bg-accent-10"
+          >
+            Коворкингам
+            <ExternalLink className="h-4 w-4 text-ink-50" />
+          </a>
+          <span className="flex items-center justify-between rounded-2xl bg-ink-100 px-4 py-3 text-base font-semibold text-white">
+            Партнёрам
+            <span className="text-[10px] font-bold uppercase tracking-wider text-white/55">
+              сейчас
+            </span>
+          </span>
+        </div>
+
+        {/* CTA */}
+        <a
+          href="#download"
+          onClick={onClose}
+          className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-br from-accent-60 via-magenta-60 to-rose-60 px-6 text-base font-semibold text-white shadow-[0_15px_40px_-12px_rgba(122,84,255,0.55)]"
+        >
+          Стать партнёром
+        </a>
+      </div>
+    </div>
   );
 }

@@ -17,7 +17,7 @@ const unbounded = Unbounded({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://marafet.app"),
+  metadataBase: new URL("https://bulkhinaa.github.io/marafet-landing-partnerka"),
   title: {
     default: "Партнёрская программа Марафет · зарабатывайте без ИП и налоговой",
     template: "%s · Партнёрка Марафет",

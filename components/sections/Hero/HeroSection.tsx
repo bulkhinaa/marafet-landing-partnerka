@@ -1,15 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Wallet,
   ShieldCheck,
-  Sparkles,
+  Sparkles as SparklesIcon,
   TrendingUp,
   ArrowRight,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ShimmerText } from "@/components/ui/ShimmerText";
+import { Sparkles } from "@/components/ui/Sparkles";
+import { FloatingElement } from "@/components/ui/FloatingElement";
+import { assetPath } from "@/lib/paths";
 
 export function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
@@ -19,7 +23,55 @@ export function HeroSection() {
       id="hero"
       className="relative isolate overflow-hidden bg-ink-100 text-white"
     >
-      {/* Большие радиальные orbs */}
+      {/* AI cinematic фон. Ken Burns только md+, на мобиле — статичный (экономия GPU) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20 opacity-50"
+      >
+        {prefersReducedMotion ? (
+          <Image
+            src={assetPath("/bg/hero-ethereal.jpg")}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        ) : (
+          <motion.div
+            className="absolute inset-0"
+            initial={{ scale: 1.05 }}
+            animate={{ scale: 1.15 }}
+            transition={{
+              duration: 22,
+              ease: "linear",
+              repeat: Infinity,
+              repeatType: "reverse",
+            }}
+          >
+            <Image
+              src={assetPath("/bg/hero-ethereal.jpg")}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </motion.div>
+        )}
+      </div>
+
+      {/* Затемняющий градиент поверх AI фона для читаемости текста */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(23,23,26,0.55) 0%, rgba(23,23,26,0.4) 40%, rgba(23,23,26,0.75) 100%)",
+        }}
+      />
+
+      {/* Большие радиальные orbs поверх */}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-40 -top-40 -z-0 h-[700px] w-[700px] rounded-full opacity-50 blur-3xl"
@@ -45,6 +97,17 @@ export function HeroSection() {
         }}
       />
 
+      {/* Плавающие искры по hero — только md+, чтобы не нагружать мобилку */}
+      <div className="pointer-events-none absolute inset-0 -z-0 hidden md:block">
+        <Sparkles
+          count={12}
+          color="rgba(255,255,255,0.85)"
+          minSize={1}
+          maxSize={3}
+          className="absolute inset-0"
+        />
+      </div>
+
       <Container
         size="xl"
         className="relative pt-32 pb-20 md:pt-40 md:pb-28 lg:pt-44 lg:pb-32"
@@ -58,7 +121,7 @@ export function HeroSection() {
             className="flex flex-col gap-7"
           >
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-white/85 ring-1 ring-inset ring-white/20 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-magenta-50" />
+              <SparklesIcon className="h-3.5 w-3.5 text-magenta-50" />
               Партнёрская программа Марафет
             </span>
 
@@ -79,17 +142,17 @@ export function HeroSection() {
               </span>
               ,
               <br />
-              без{" "}
+              без походов в{" "}
               <span className="line-through decoration-rose-50/70 decoration-4">
-                налоговой
+                налоговую
               </span>
               .
             </h1>
 
             <p className="max-w-2xl text-pretty text-base leading-relaxed text-white/75 md:text-lg">
               Приглашайте друзей в Марафет — получайте 1% с каждого их визита
-              плюс 1% с визитов их друзей. Налоги и страховые взносы берём на
-              себя, вам приходят чистые деньги на карту.
+              плюс 1% с визитов их друзей. НДФЛ и страховые взносы платим за вас,
+              на карту приходят чистые деньги.
             </p>
 
             <div className="flex flex-wrap items-center gap-3">
@@ -116,15 +179,15 @@ export function HeroSection() {
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-success" />
-                ОПС + ОМС за вас
+                Страховые взносы за вас
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-success" />
-                Пенсионный стаж
+                Страховой стаж для пенсии
               </span>
               <span className="inline-flex items-center gap-1.5">
                 <ShieldCheck className="h-4 w-4 text-success" />
-                Без лимита 2,4 млн
+                Без лимита 2,4 млн ₽
               </span>
             </div>
           </motion.div>
@@ -136,7 +199,9 @@ export function HeroSection() {
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             className="relative mx-auto w-full max-w-md lg:max-w-none"
           >
-            <EarningsPreview />
+            <FloatingElement amplitude={6} duration={6}>
+              <EarningsPreview />
+            </FloatingElement>
           </motion.div>
         </div>
       </Container>
@@ -181,14 +246,19 @@ function EarningsPreview() {
 
         {/* Главная цифра */}
         <div className="rounded-2xl bg-gradient-to-br from-accent-60 to-magenta-60 p-5 text-white">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
-            Начислено в этом месяце
-          </p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/80">
+              Начислено в этом месяце
+            </p>
+            <span className="rounded-full bg-white/20 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/90">
+              пример
+            </span>
+          </div>
           <p className="mt-1 font-display text-4xl font-bold leading-none md:text-5xl">
             12 350 ₽
           </p>
           <p className="mt-2 text-xs text-white/80">
-            НДФЛ уже удержан. На карту 16 числа.
+            НДФЛ уже удержан. На карту по заявке.
           </p>
         </div>
 
@@ -219,21 +289,21 @@ function EarningsPreview() {
         </div>
       </div>
 
-      {/* Floating "ОПС +" */}
+      {/* Floating "стаж" */}
       <div className="absolute -right-3 top-16 z-20 flex flex-col items-center gap-0 rounded-2xl bg-white px-3 py-2 shadow-[0_15px_40px_-10px_rgba(0,0,0,0.3)]">
         <span className="font-display text-sm font-bold text-success">
           +стаж
         </span>
         <span className="text-[8px] font-bold uppercase tracking-wider text-ink-60">
-          в пенсию
+          для пенсии
         </span>
       </div>
 
-      {/* Floating "ОМС" */}
+      {/* Floating "Без декларации" */}
       <div className="absolute -left-3 bottom-24 z-20 flex flex-col items-center gap-0 rounded-2xl bg-success px-3 py-2 text-white shadow-[0_15px_40px_-10px_rgba(24,179,138,0.5)]">
-        <span className="font-display text-sm font-bold">ОМС</span>
+        <span className="font-display text-sm font-bold">3-НДФЛ</span>
         <span className="text-[8px] font-bold uppercase tracking-wider text-white/80">
-          включено
+          не подаём
         </span>
       </div>
     </div>

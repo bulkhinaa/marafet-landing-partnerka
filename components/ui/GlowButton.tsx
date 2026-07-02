@@ -4,7 +4,12 @@ import { type ReactNode, type ButtonHTMLAttributes } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/cn";
 
-interface GlowButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+/* Omit — конфликт типов HTML-обработчиков с framer-motion HTMLMotionProps */
+interface GlowButtonProps
+  extends Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart"
+  > {
   children: ReactNode;
   /** Glow color (CSS color) */
   glowColor?: string;

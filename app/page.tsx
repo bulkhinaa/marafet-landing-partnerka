@@ -1,4 +1,5 @@
 import { StickyNav } from "@/components/ui/StickyNav";
+import { SpotlightCursor } from "@/components/ui/SpotlightCursor";
 import { HeroSection } from "@/components/sections/Hero/HeroSection";
 import { HowItWorksSection } from "@/components/sections/HowItWorks/HowItWorksSection";
 import { EarningsTreeSection } from "@/components/sections/EarningsTree/EarningsTreeSection";
@@ -12,6 +13,7 @@ import { FooterSection } from "@/components/sections/Footer/FooterSection";
 export default function Home() {
   return (
     <>
+      <SpotlightCursor />
       <StickyNav />
       <main className="overflow-x-hidden">
         <HeroSection />
